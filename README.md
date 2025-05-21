@@ -81,8 +81,8 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 ```
 
-###Running the Application
-##Development Mode
+### Running the Application
+## Development Mode
 For development with hot reloading:
 ```bash
 # Start in development mode with auto-reload
@@ -92,8 +92,7 @@ npm run dev
 npx ts-node-dev --respawn src/index.ts
 ```
 
-
-Production Mode
+### Production Mode
 Building and running for production:
 ```bash
 # Build the TypeScript code to JavaScript
@@ -107,7 +106,7 @@ npm start
 node dist/index.js
 ```
 
-###Running with PM2 (Recommended for Production)
+### Running with PM2 (Recommended for Production)
 PM2 allows you to run the application in cluster mode for better performance and reliability:
 ```bash
 # Install PM2 globally if not already installed
@@ -125,7 +124,7 @@ npm run monit:pm2    # Monitor the service (or: pm2 monit)
 ```
 
 
-###PM2 Ecosystem Configuration
+### PM2 Ecosystem Configuration
 The ecosystem.config.js file is configured as follows:
 ```bash
 module.exports = {
@@ -149,8 +148,61 @@ module.exports = {
 ```
 You can adjust the number of instances based on your server's CPU cores and available memory.
 
-###Configuration
+### Configuration
 Environment Variables
+| Variable        | Default     | Description                                         |
+|----------------|-------------|-----------------------------------------------------|
+| `PORT`         | `3000`      | The port on which the server will listen           |
+| `NODE_ENV`     | `development`| Environment (`development` / `production`)         |
+| `MAX_CONNECTIONS` | `4000`  | Maximum number of WebSocket connections per process |
+| `LOG_LEVEL`    | `debug`     | Logging level: `debug` (dev) / `info` (prod)       |
+| `REDIS_HOST`   | `localhost` | Redis server host                                   |
+| `REDIS_PORT`   | `6379`      | Redis server port                                   |
+
+### API Endpoints
+The server exposes several HTTP endpoints:
+GET /api/health
+
+### Returns the server's health status.
+## Response:
+```bash
+{
+  "status": "ok",
+  "uptime": 1234,
+  "timestamp": "2023-09-01T12:00:00Z",
+  "activeConnections": 42,
+  "maxConnections": 4000
+}
+```
+
+### GET /api/connections
+Returns information about the current WebSocket connections.
+## Response:
+```bash
+{
+  "activeConnections": 42,
+  "maxConnections": 4000
+}
+```
+
+### POST /api/send-to-user
+Sends a message to a specific user identified by their userId.
+## Request Body:
+```bash
+{
+  "userId": "user123",
+  "message": "Hello, world!",
+  "type": "notification"
+}
+```
+## Response:
+```bash
+{
+  "success": true,
+  "delivered": 1,
+  "userId": "user123"
+}
+```
 
 
 ```bash
@@ -158,10 +210,6 @@ Environment Variables
 ```bash
 ```
 
-```bash
-```
-```bash
-```
 
 
 ```bash
