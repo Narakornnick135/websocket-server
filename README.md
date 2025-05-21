@@ -344,9 +344,21 @@ brew install redis
 brew services start redis
 ```
 
+2 Max Connections Reached
+    - Increase MAX_CONNECTIONS if needed
+    - Add more processes via PM2 configuration
+
+3 Memory Issues
+    - Check for memory leaks using tools like Node.js inspector
+    - Consider adjusting the number of PM2 instances
+
+4 Monitoring
+For production environments, use PM2's monitoring capabilities:
 ```bash
-```
-```bash
+npm run monit:pm2
+# Or directly with PM2
+pm2 monit
 ```
 
-
+License
+MIT 
