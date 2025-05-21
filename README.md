@@ -277,12 +277,12 @@ ws.send(JSON.stringify({
 }));
 ```
 
-Architecture
-Components
+### Architecture
+## Components
 
-WebSocket Server (websocket.ts)
+- WebSocket Server (websocket.ts)
 
-Handles WebSocket connections and events
+-- Handles WebSocket connections and events
 Manages heartbeat mechanism
 
 
