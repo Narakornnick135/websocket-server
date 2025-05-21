@@ -33,3 +33,29 @@ git init
 
 # Copy all project files or clone from repository if you have one
 # git clone https://github.com/yourusername/websocket-server.git
+```
+
+### 2. Create project files
+
+Create the following project structure and files as shown in the repository:
+```bash
+websocket-server/
+├── .env
+├── ecosystem.config.js
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── src/
+    ├── config/
+    │   └── env.ts
+    ├── services/
+    │   ├── connectionManager.ts
+    │   ├── messageHandler.ts
+    │   └── redisService.ts
+    ├── utils/
+    │   └── logger.ts
+    ├── index.ts
+    ├── server.ts
+    └── websocket.ts
+```
+
