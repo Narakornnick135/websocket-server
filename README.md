@@ -280,50 +280,68 @@ ws.send(JSON.stringify({
 ### Architecture
 ## Components
 
-- WebSocket Server (websocket.ts)
+1 WebSocket Server (websocket.ts)
+    - Handles WebSocket connections and events
+    - Manages heartbeat mechanism
 
--- Handles WebSocket connections and events
-Manages heartbeat mechanism
-
-
-Connection Manager (connectionManager.ts)
-
-Tracks active connections
-Associates user IDs with connections
-Facilitates message delivery
+2 Connection Manager (connectionManager.ts)
+    - Tracks active connections
+    - Associates user IDs with connections
+    - Facilitates message delivery
 
 
-Message Handler (messageHandler.ts)
+3 Message Handler (messageHandler.ts)
+    - Processes different types of WebSocket messages
+    - Provides appropriate responses
 
-Processes different types of WebSocket messages
-Provides appropriate responses
-
-
-Redis Service (redisService.ts)
-
-Enables cross-process communication
-Tracks user-to-process mapping
-Provides Redis pub/sub functionality
+4 Redis Service (redisService.ts)
+    - Enables cross-process communication
+    - Tracks user-to-process mapping
+    - Provides Redis pub/sub functionality
 
 
+### Scaling with Redis
+    The server uses Redis to track which process each user is connected to. When a message needs to be sent to a user on a different process, Redis pub/sub is used to deliver the message to the appropriate process.
 
-Scaling with Redis
-The server uses Redis to track which process each user is connected to. When a message needs to be sent to a user on a different process, Redis pub/sub is used to deliver the message to the appropriate process.
-Development
-Logging
-The server uses Pino for logging. Log levels can be configured using the LOG_LEVEL environment variable:
+### Development
+##Logging
+    The server uses Pino for logging. Log levels can be configured using the LOG_LEVEL environment variable:
 
-debug: Detailed debugging information
-info: General information
-warn: Warning messages
-error: Error messages
+    - debug: Detailed debugging information
+    - info: General information
+    - warn: Warning messages
+    - error: Error messages
 
-Testing WebSocket Connections
+## Testing WebSocket Connections
 You can use tools like wscat to test WebSocket connections:
+```bash
+# Install wscat
+npm install -g wscat
+
+# Connect to the WebSocket server
+wscat -c ws://localhost:3000
+
+# Send a message (in the wscat console)
+{"type":"ping"}
+```
+
+### Troubleshooting
+## Common Issues
+
+1 Redis Connection Errors
+    - Ensure Redis is running and accessible
+    - Check Redis host and port configuration
+    - Install Redis if not already installed:
 
 ```bash
-```
-```bash
+# Ubuntu/Debian
+sudo apt update
+sudo apt install redis-server
+sudo systemctl start redis-server
+
+# MacOS
+brew install redis
+brew services start redis
 ```
 
 ```bash
