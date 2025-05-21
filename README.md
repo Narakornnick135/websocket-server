@@ -204,13 +204,127 @@ Sends a message to a specific user identified by their userId.
 }
 ```
 
+### GET /api/redis-info
+Returns information about Redis connections and user distribution across processes.
+## Response:
+```bash
+{
+  "processId": "12345",
+  "userProcesses": {
+    "user123": "12345",
+    "user456": "12346"
+  },
+  "processUsers": {
+    "12345": ["user123"],
+    "12346": ["user456"]
+  },
+  "localConnections": 42
+}
+```
+
+### WebSocket Communication
+## Connecting to the WebSocket Server
+```bash
+const ws = new WebSocket('ws://localhost:3000');
+
+ws.onopen = () => {
+  console.log('Connected to WebSocket server');
+};
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  console.log('Message received:', data);
+};
+```
+
+
+### Message Types
+## 1. Registration
+Register a user ID with the c
+```bash
+ws.send(JSON.stringify({
+  type: 'register',
+  userId: 'user123'
+}));
+```
+
+## 2. Ping/Pong
+Check connection:
+```bash
+ws.send(JSON.stringify({
+  type: 'ping'
+}));
+```
+
+## 3. Private Messaging
+Send a message to a specific user:
+```bash
+ws.send(JSON.stringify({
+  type: 'notification',
+  targetUserId: 'user456',
+  action: 'new_message',
+  data: { content: 'Hello, user456!' }
+}));
+```
+
+## 4. Chat Messages
+Send a chat message:
+```bash
+ws.send(JSON.stringify({
+  type: 'chat',
+  targetUserId: 'user456',
+  text: 'Hello, how are you?'
+}));
+```
+
+Architecture
+Components
+
+WebSocket Server (websocket.ts)
+
+Handles WebSocket connections and events
+Manages heartbeat mechanism
+
+
+Connection Manager (connectionManager.ts)
+
+Tracks active connections
+Associates user IDs with connections
+Facilitates message delivery
+
+
+Message Handler (messageHandler.ts)
+
+Processes different types of WebSocket messages
+Provides appropriate responses
+
+
+Redis Service (redisService.ts)
+
+Enables cross-process communication
+Tracks user-to-process mapping
+Provides Redis pub/sub functionality
+
+
+
+Scaling with Redis
+The server uses Redis to track which process each user is connected to. When a message needs to be sent to a user on a different process, Redis pub/sub is used to deliver the message to the appropriate process.
+Development
+Logging
+The server uses Pino for logging. Log levels can be configured using the LOG_LEVEL environment variable:
+
+debug: Detailed debugging information
+info: General information
+warn: Warning messages
+error: Error messages
+
+Testing WebSocket Connections
+You can use tools like wscat to test WebSocket connections:
 
 ```bash
 ```
 ```bash
 ```
-
-
 
 ```bash
 ```
